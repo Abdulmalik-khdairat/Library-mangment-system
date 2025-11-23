@@ -20,6 +20,5 @@ class Borrow(Base):
     created_at=Column(DateTime,default=datetime.utcnow)
     updated_at=Column(DateTime,default=datetime.utcnow,onupdate=datetime.utcnow)
 
-    #relationship
     book=relationship("Book",back_populates="borrows")
     user=relationship("User",back_populates="borrows")

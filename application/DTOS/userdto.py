@@ -11,7 +11,6 @@ from domain.entity.user_entity import UserEntity
 
 
 class UserCreate(BaseModel):
-    """User registration model"""
     username: str = Field(..., min_length=3, max_length=50)
     email: EmailStr
     password: str = Field(..., min_length=5)
@@ -29,7 +28,6 @@ class UserResponse(BaseModel):
     updated_at: Optional[datetime]
 
 
-#mapper fun
 class UserUpdate(BaseModel):
     password: Optional[str] = None
     username: Optional[str] = None
@@ -52,7 +50,7 @@ def to_user_response(user: UserEntity) -> UserResponse:
     )
 def to_user_entity(user: UserCreate) -> UserEntity:
     return UserEntity(
-        id=None,  # Will be set by the database
+        id=None,
         username=user.username,
         email=user.email,
         full_name=user.full_name,
@@ -65,7 +63,7 @@ def to_user_entity(user: UserCreate) -> UserEntity:
 def update_to_entity(user: UserUpdate) -> UserEntity:
     hashed_password = PasswordService.hash_password(user.password) if user.password else None
     return UserEntity(
-        id=None,  # Will be set by the database
+        id=None,
         username=user.username,
         email=user.email,
         full_name=user.full_name,

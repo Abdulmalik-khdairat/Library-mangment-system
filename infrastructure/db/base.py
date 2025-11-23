@@ -6,7 +6,7 @@ DATABASE_URL = "postgresql+psycopg2://postgres:50507811ad@localhost/Library"
 
 engine = create_engine(
     DATABASE_URL,
-    echo=False,  # set True to see SQL logs
+    echo=False,
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

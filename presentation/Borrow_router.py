@@ -5,8 +5,8 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
 from application.DTOS.borrow_dto import BorrowRequest
-from application.services.borrow_service import borrow_book_service, return_book_service, get_borrow_service, \
-    get_borrow_by_user_service, get_overdue_service
+from application.auth.jwt_middleware import user_role, admin_or_employee
+from application.services import borrow_service
 from infrastructure.db.base import get_db
 
 router = APIRouter(prefix="/borrow", tags=["Borrow"])
@@ -19,41 +19,41 @@ async def borrow_book(
     book_id: int,
     borrow_request: BorrowRequest,
     db: Session = Depends(get_db),
-    token: str = Depends(oauth2_scheme)
-
+    user = Depends(user_role)
         ):
-    return borrow_book_service(book_id, borrow_request, db, token)
+    return borrow_service.borrow_book(book_id, borrow_request, db,user["id"])
 
 
 
 @router.get("/")
 async def get_borrow(
     db: Session = Depends(get_db),
-    token: str = Depends(oauth2_scheme)
+    user=Depends(admin_or_employee)
         ):
-    return get_borrow_service( db, token)
+    return borrow_service.get_borrow( db)
 
 @router.get("/user/{user_id}")
 async def get_borrow_by_user(
     user_id: int,
     db: Session = Depends(get_db),
-    token: str = Depends(oauth2_scheme)
+    user=Depends(admin_or_employee)
         ):
-    return get_borrow_by_user_service(user_id, db, token)
+    return borrow_service.get_borrow_by_user(user_id, db)
 
 @router.get("/overdue")
 async def get_overdue(
     db: Session = Depends(get_db),
-    token: str = Depends(oauth2_scheme)
+    user=Depends(admin_or_employee)
         ):
-    return get_overdue_service(db, token)
+    return borrow_service.get_overdue(db)
 
 
 @router.put("/{borrow_id}/return")
 async def return_book(
     borrow_id: int,
     db: Session = Depends(get_db),
-    token: str = Depends(oauth2_scheme)
-        ):
-    return return_book_service(borrow_id, db, token)
+    user=Depends(user_role)
+):
+
+    return borrow_service.return_book(borrow_id, db, user["id"])
 

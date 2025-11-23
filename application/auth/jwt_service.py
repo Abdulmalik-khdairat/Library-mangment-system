@@ -34,65 +34,15 @@ def create_refresh_token(data: dict, expires_days: int = REFRESH_TOKEN_EXPIRE_DA
 
 
 def jwt_decode(token: str):
-    if not token:
-        raise HTTPException(status_code=401, detail="No token provided")
-        
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        
-        # Check if token is expired
-        if "exp" in payload and payload["exp"] < datetime.utcnow().timestamp():
-
-            raise HTTPException(status_code=403, detail="Token has expired")
-            
         return payload
-        
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=403, detail="Token has expired")
-    except jwt.JWTClaimsError:
-        raise HTTPException(status_code=403, detail="Invalid token claims")
-    except jwt.JWTError as e:
-        raise HTTPException(status_code=403, detail="Invalid token")
+        raise HTTPException(403 ,"Token expired")
     except Exception as e:
-        raise HTTPException(status_code=500, detail="Error decoding token")
+        raise HTTPException(
+            status_code=403,
+            detail={"message": "Invalid token", "code": "invalid_token"}
+        )
 
 
-# async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"},
-#     )
-#
-#     try:
-#         if not token:
-#             raise credentials_exception
-#
-#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#
-#         # Check if token is expired
-#         if "exp" in payload and payload["exp"] < datetime.utcnow().timestamp():
-#             raise HTTPException(
-#                 status_code=status.HTTP_401_UNAUTHORIZED,
-#                 detail="Token has expired",
-#                 headers={"WWW-Authenticate": "Bearer"},
-#             )
-#
-#         user_id: int = int(payload.get("id"))
-#         if user_id is None:
-#             raise credentials_exception
-#
-#         user = user_repo['get_by_id'](db, user_id)
-#         if user is None:
-#             raise credentials_exception
-#
-#         return user
-#
-#     except (JWTError, ValueError):
-#         raise credentials_exception
-#     except jwt.JWTClaimsError:
-#         raise HTTPException(status_code=403, detail="Invalid token claims")
-#     except jwt.JWTError as e:
-#         raise HTTPException(status_code=403, detail="Invalid token")
-#     except Exception as e:
-#         raise HTTPException(status_code=500, detail="Error decoding token")

@@ -4,7 +4,7 @@ class PasswordService:
 
     @staticmethod
     def _truncate(password: str) -> bytes:
-        return password.encode("utf-8")[:72]   # bcrypt limit
+        return password.encode("utf-8")[:72]
 
     @staticmethod
     def hash_password(raw_password: str) -> str:

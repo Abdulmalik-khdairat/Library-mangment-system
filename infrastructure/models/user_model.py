@@ -23,8 +23,7 @@ class User(Base):
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
     
-    # Relationship with Book
     books = relationship("Book", back_populates="author")
     
-    # Relationship with Borrow
+
     borrows = relationship("Borrow", back_populates="user")

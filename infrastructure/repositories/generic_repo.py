@@ -12,30 +12,24 @@ def create_generic_repository(
         model_cls: Type[T],
         domain_cls: Type[D]
 ) -> Any:
-
     def to_domain(model_obj):
         if model_obj is None:
             return None
-            
-        # Get all column names from the model
+
         columns = {column.name for column in model_cls.__table__.columns}
-        
-        # Get the fields that the domain class accepts in its constructor
+
         domain_fields = set(domain_cls.__annotations__.keys())
-        
-        # Only include fields that exist in the domain class
+
         data = {}
         for key, value in model_obj.__dict__.items():
-            # Skip private attributes, SQLAlchemy internal attributes, and non-domain fields
             if key.startswith('_') or key not in domain_fields:
                 continue
-                
-            # Handle enum values by getting their .value
+
             if hasattr(value, 'value'):
                 value = value.value
-                
+
             data[key] = value
-        
+
         return domain_cls(**data)
 
     def create(db:Session,domain):
@@ -83,7 +77,6 @@ def create_generic_repository(
             
 
         if hasattr(model, 'borrows'):
-            # Delete all related borrow records
             for borrow in model.borrows:
                 db.delete(borrow)
                 
@@ -96,13 +89,11 @@ def create_generic_repository(
         if not model:
             return None
             
-        # Get all column names from the model
         columns = {column.name for column in model_cls.__table__.columns}
         
-        # Update only the fields that exist in the model and are not None in the domain object
         for key, value in domain.__dict__.items():
             if key in columns and value is not None:
-                # Handle enum values by getting their .value
+
                 if hasattr(value, 'value'):
                     setattr(model, key, value.value)
                 else:
@@ -130,8 +121,6 @@ def create_generic_repository(
         model.role = role
         db.commit()
         db.refresh(model)
-        # Create a minimal domain object with just the updated role
-        # to avoid requiring all fields
         if hasattr(model, 'to_dict'):
             return model.to_dict()
         return {'id': model.id, 'role': model.role}
