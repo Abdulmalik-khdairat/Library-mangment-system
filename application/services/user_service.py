@@ -111,6 +111,6 @@ def update_user_role(id:int ,role:RoleEnum , db:Session):
     if not user_repo['update_role'](db, id, role):
         return HTTPException(404, "User not found")
 
-    return  {"status_code": 200, "detail": "User updated"}
+    return  {"status_code": 200, "detail": "User role updated"}
 
 

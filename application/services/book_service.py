@@ -2,7 +2,6 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 
 from application.DTOS.book_dto import to_book_entity, to_book_response, CreateBookDto, to_book_entity_update
-from application.auth.jwt_service import jwt_decode
 from infrastructure.repositories.book_repository import book_repo
 
 

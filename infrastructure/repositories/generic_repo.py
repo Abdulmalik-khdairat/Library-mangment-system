@@ -68,8 +68,8 @@ def create_generic_repository(
             )
         )
 
-
         return [to_domain(model) for model in models]
+
     def delete(db, id):
         model = db.query(model_cls).filter(model_cls.id == id).first()
         if not model:

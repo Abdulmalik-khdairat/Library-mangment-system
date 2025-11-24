@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, Field
 
 from domain.entity.borrow_entity import BorrowEntity
 from domain.entity.status_enum import StatusEnum

@@ -68,7 +68,6 @@ def admin_or_employee_or_user(
     if role in ["ADMIN", "EMPLOYEE"]:
         return payload
 
-
     if role == "USER" and user_id == path_id:
         return payload
 

@@ -1,5 +1,5 @@
 from infrastructure.db.base import Base, engine
-from infrastructure.models import *  # This imports all models
+from infrastructure.models import *
 
 def init_db():
     print("Creating database tables...")
