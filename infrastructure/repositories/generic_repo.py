@@ -144,6 +144,11 @@ def create_generic_repository(
         if not model:
             return None
         return [to_domain(model) for model in model]
+    def get_returned(db):
+        model= db.query(model_cls).filter(model_cls.status=="RETURNED").all()
+        if not model:
+            return None
+        return [to_domain(model) for model in model]
 
     return {
         "create": create,
@@ -156,5 +161,6 @@ def create_generic_repository(
         "update_role":update_role,
         "get_by_email":get_by_email,
         "get_by_user_id":get_by_user_id,
-        "get_overdue":get_overdue
+        "get_overdue":get_overdue,
+        "get_returned":get_returned
     }

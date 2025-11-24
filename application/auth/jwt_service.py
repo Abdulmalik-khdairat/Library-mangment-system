@@ -1,22 +1,16 @@
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any
 
 from fastapi import HTTPException, status, Depends
 from jose import JWTError, jwt
-from sqlalchemy.orm import Session
+
 
 from application.auth.jwt_config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS
-from infrastructure.db.base import get_db
-from infrastructure.repositories.user_repository import user_repo
-
-
-
 
 
 
 def create_access_token(data: dict, expires_minutes: int = ACCESS_TOKEN_EXPIRE_MINUTES):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=expires_minutes)
+    expire = datetime.now() + timedelta(minutes=expires_minutes)
     to_encode["exp"] = expire
 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
@@ -25,7 +19,7 @@ def create_access_token(data: dict, expires_minutes: int = ACCESS_TOKEN_EXPIRE_M
 
 def create_refresh_token(data: dict, expires_days: int = REFRESH_TOKEN_EXPIRE_DAYS):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(days=expires_days)
+    expire = datetime.now() + timedelta(days=expires_days)
     to_encode["exp"] = expire
 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)

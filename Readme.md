@@ -7,7 +7,7 @@ providing a robust API for managing books, users, and borrowing operations.
 
 - **User Management**
   - User registration and authentication (JWT)
-  - Role-based access control (Admin, Employee, User,Auther)
+  - Role-based access control (Admin, Employee, User,Author)
   - User profile management
 
 - **Book Management**

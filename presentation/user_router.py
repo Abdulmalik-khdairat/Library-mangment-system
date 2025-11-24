@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from fastapi import APIRouter, Depends, Request, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -26,10 +24,6 @@ def get_all_user(
         raise HTTPException(status_code=401, detail="Invalid token")
 
     return user_service.retrieve_all_users(db, page, limit)
-
-
-
-
 
 @router.get("/{id}")
 def get_user_by_id(
