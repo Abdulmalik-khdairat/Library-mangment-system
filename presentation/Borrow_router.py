@@ -29,7 +29,7 @@ async def get_borrow(
     db: Session = Depends(get_db),
     user=Depends(admin_or_employee)
         ):
-    return borrow_service.get_borrow( db)
+    return borrow_service.get_borrow(db)
 
 @router.get("/user/{user_id}")
 async def get_borrow_by_user(

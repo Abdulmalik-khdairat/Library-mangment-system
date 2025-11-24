@@ -1,12 +1,15 @@
+from typing import Annotated
 
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from fastapi import Depends, HTTPException, Request
-from presentation.auth_router import oauth2_scheme
 from application.auth.jwt_service import jwt_decode
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+token_dep = Annotated[str, Depends(oauth2_scheme)]
 
 class JWTMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
@@ -47,7 +50,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
 
         return await call_next(request)
 
-def admin_or_employee(token: str = Depends(oauth2_scheme)):
+def admin_or_employee(token: token_dep):
     payload = jwt_decode(token)
     role = payload.get("role")
 
@@ -57,7 +60,7 @@ def admin_or_employee(token: str = Depends(oauth2_scheme)):
     return payload
 def admin_or_employee_or_user(
     request: Request,
-    token: str = Depends(oauth2_scheme)
+    token: token_dep
 ):
     payload = jwt_decode(token)
     role = payload.get("role")
@@ -74,7 +77,7 @@ def admin_or_employee_or_user(
     raise HTTPException(status_code=403, detail="Not authorized")
 
 def auther(
-           token :str = Depends(oauth2_scheme)
+           token :token_dep
 ):
     payload = jwt_decode(token)
     role = payload.get("role")
@@ -84,7 +87,7 @@ def auther(
 
     raise HTTPException(status_code=403, detail="Not authorized only author")
 
-def user_role(token: str = Depends(oauth2_scheme)):
+def user_role(token: token_dep):
     payload = jwt_decode(token)
     role = payload.get("role")
     if role == "USER":
