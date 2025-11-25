@@ -2,8 +2,6 @@ from datetime import datetime, timedelta
 
 from fastapi import HTTPException, status, Depends
 from jose import JWTError, jwt
-
-
 from application.auth.jwt_config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES, REFRESH_TOKEN_EXPIRE_DAYS
 
 

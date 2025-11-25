@@ -4,9 +4,9 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError
 from starlette.middleware.base import BaseHTTPMiddleware
-
 from fastapi import Depends, HTTPException, Request
 from application.auth.jwt_service import jwt_decode
+
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 token_dep = Annotated[str, Depends(oauth2_scheme)]
@@ -29,6 +29,7 @@ class JWTMiddleware(BaseHTTPMiddleware):
                 request.state.user_id = payload.get("id")
                 request.state.role = payload.get("role")
                 request.state.username = payload.get("sub")
+
 
                 if request.state.user_id is None:
                     return JSONResponse(

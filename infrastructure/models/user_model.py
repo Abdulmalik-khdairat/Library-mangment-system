@@ -1,15 +1,8 @@
-from datetime import datetime
-from typing import List
-
 from sqlalchemy import Column, String, Integer, Enum, Boolean, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
 
 from domain.entity.role_enum import RoleEnum
 from infrastructure.db.base import Base
-
-
-
-
 
 class User(Base):
     __tablename__ = "users"

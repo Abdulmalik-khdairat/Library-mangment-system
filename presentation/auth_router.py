@@ -36,11 +36,13 @@ def login_user(
 
 @router.get("/me")
 def get_current_user(
-
+    token:token_dep,
     db: db_dep,
     req:Request
 ):
-    user_id = req.state.user_id
+    user_id=req.state.user_id
+
+
     if not user_id:
         raise HTTPException(401, "Invalid token")
 

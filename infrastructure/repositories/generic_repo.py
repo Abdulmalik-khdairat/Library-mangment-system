@@ -2,7 +2,6 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from typing import Callable, Type, TypeVar, Generic, Any
 from sqlalchemy import or_
-from sqlalchemy.orm import DeclarativeBase
 from infrastructure.db.base import Base as SQLAlchemyBase
 
 T = TypeVar('T', bound=SQLAlchemyBase)
@@ -34,6 +33,7 @@ def create_generic_repository(
 
     def create(db:Session,domain):
         model = model_cls(**domain.__dict__)
+
         db.add(model)
         db.commit()
         db.refresh(model)

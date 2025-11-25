@@ -48,11 +48,10 @@ def login(username: str, password: str, db: Session):
     }
 
 
-def refresh_token(token: str, db: Session):
-    user = user_repo['get_by_id'](db, token)
+def refresh_token(id: str, db: Session):
+    user = user_repo['get_by_id'](db, id)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid token")
-    print(user)
     payload = {
         "sub": user.username,
         "id": user.id,

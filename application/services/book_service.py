@@ -47,3 +47,5 @@ def update_book_service(book_id: int, book: CreateBookDto, db: Session):
     return {"message": "Book updated successfully"}
 
 
+def update_book_service1(id, book, db):
+    return None

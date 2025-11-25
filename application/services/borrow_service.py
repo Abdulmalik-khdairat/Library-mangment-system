@@ -56,11 +56,13 @@ def return_book(borrow_id: int, db: Session, user_id :int):
     return to_borrow_response(borrow_entity)
 
 
-def get_borrow(db:Session ):
+def get_borrow(db:Session,page:int,limit:int ):
 
-    borrow_entity = borrow_repo['get_all'](db)
+    borrow_entity = borrow_repo['get_all'](db,page,limit)
+
     if not borrow_entity:
-        raise HTTPException(404, "Borrow not found")
+        raise HTTPException(404, "now borrow was found")
+
     return [to_borrow_response(borrow) for borrow in borrow_entity]
 
 def get_borrow_by_user(user_id :int,db:Session ):
